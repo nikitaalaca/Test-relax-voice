@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>QSTORE ZEN -- Premium UI Fix</title>
+    <title>QSTORE ZEN Pro — Premium Light Design</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F6F6FA;
+            background-color: #F4F5F9;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             color: #1D1D1F;
@@ -40,59 +40,56 @@
             position: fixed;
             inset: 0;
             z-index: -1;
-            background: #F4F5F9;
+            background: #F2F4F8;
             overflow: hidden;
         }
         .liquid-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(140px);
+            filter: blur(130px);
             mix-blend-mode: multiply;
-            opacity: 0.15;
-            animation: floatingMesh 20s infinite alternate ease-in-out;
+            opacity: 0.18;
+            animation: floatingMesh 18s infinite alternate ease-in-out;
         }
-        .orb-1 {
-            width: 700px; height: 700px; top: -100px; left: -100px;
-            background: radial-gradient(circle, #06b6d4 0%, rgba(255,255,255,0) 70%);
-        }
-        .orb-2 {
-            width: 800px; height: 800px; bottom: -150px; right: -100px;
-            background: radial-gradient(circle, #9333ea 0%, rgba(255,255,255,0) 70%);
-            animation-delay: -6s;
-        }
-        .orb-3 {
-            width: 600px; height: 600px; top: 40%; left: 30%;
-            background: radial-gradient(circle, #ec4899 0%, rgba(255,255,255,0) 70%);
-            animation-delay: -12s;
-        }
+        .orb-1 { width: 700px; height: 700px; top: -100px; left: -100px; background: radial-gradient(circle, #06b6d4 0%, rgba(255,255,255,0) 70%); }
+        .orb-2 { width: 800px; height: 800px; bottom: -150px; right: -100px; background: radial-gradient(circle, #9333ea 0%, rgba(255,255,255,0) 70%); animation-delay: -5s; }
+        .orb-3 { width: 600px; height: 600px; top: 35%; left: 25%; background: radial-gradient(circle, #ec4899 0%, rgba(255,255,255,0) 70%); animation-delay: -10s; }
+        
         @keyframes floatingMesh {
-            0% { transform: translate(0, 0) scale(1); filter: blur(140px) hue-rotate(0deg); opacity: 0.13; }
-            50% { transform: translate(80px, -60px) scale(1.15); filter: blur(160px) hue-rotate(180deg); opacity: 0.18; }
-            100% { transform: translate(-40px, 40px) scale(0.9); filter: blur(140px) hue-rotate(360deg); opacity: 0.13; }
+            0% { transform: translate(0, 0) scale(1); filter: blur(130px); opacity: 0.15; }
+            50% { transform: translate(60px, -50px) scale(1.1); filter: blur(150px); opacity: 0.22; }
+            100% { transform: translate(-30px, 30px) scale(0.95); filter: blur(130px); opacity: 0.15; }
         }
 
         .apple-spring {
-            transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
         }
         .apple-spring:hover { transform: translateY(-2px); }
         .apple-spring:active { transform: scale(0.96); }
-        .progress-fill { transition: width 1s linear; }
         
         @keyframes dynamicWave {
-            0% { transform: scale(0.95); opacity: 0.6; filter: hue-rotate(0deg); }
-            50% { transform: scale(1.25); opacity: 0.3; filter: hue-rotate(180deg); }
-            100% { transform: scale(1.55); opacity: 0; filter: hue-rotate(360deg); }
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 0.2; }
+            100% { transform: scale(1.6); opacity: 0; }
         }
-        .visual-wave-1 { animation: dynamicWave 4s infinite cubic-bezier(0.25, 1, 0.5, 1); }
-        .visual-wave-2 { animation: dynamicWave 4s infinite cubic-bezier(0.25, 1, 0.5, 1); animation-delay: 2s; }
+        .visual-wave-1 { animation: dynamicWave 5s infinite cubic-bezier(0.25, 1, 0.5, 1); }
+        .visual-wave-2 { animation: dynamicWave 5s infinite cubic-bezier(0.25, 1, 0.5, 1); animation-delay: 2.5s; }
 
-        @keyframes opacityFade {
-            0% { opacity: 0; transform: translateY(4px); }
+        @keyframes staggerFade {
+            0% { opacity: 0; transform: translateY(12px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-msg { animation: opacityFade 0.5s ease-out forwards; }
+        .animate-fade-in { animation: staggerFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .scrollbar-none::-webkit-scrollbar { display: none; }
         .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes eqBar {
+            0%, 100% { transform: scaleY(0.2); }
+            50% { transform: scaleY(1); }
+        }
+        .eq-bar { animation: eqBar 1.2s ease-in-out infinite; transform-origin: bottom; }
+        .eq-fast { animation-duration: 0.6s; }
+        .eq-slow { animation-duration: 1.8s; }
     </style>
 </head>
 <body>
@@ -109,28 +106,29 @@
         const { useState, useEffect, useRef } = React;
 
         const SINGLE_VOICE_FILE = "audio/female_1.mp3";
-        const SOUND_NAMES = { drone: 'Космос', waves: 'Океан', wind: 'Ветер', bell: 'Чаши' };
+        const SOUND_NAMES = { drone: '🪐 Космос', waves: '🌊 Океан', wind: '💨 Ветер', bell: '🥣 Чаши' };
+        
+        const MOTIVATIONAL_MESSAGES = [
+            "Каждый проданный девайс делает мир вокруг технологичнее и чище!",
+            "Клиенты чувствуют твою уверенность. Выдохни, улыбнись и взорви эту смену!",
+            "Заряжай устройства на витрине и вовремя заряжай свой внутренний аккумулятор.",
+            "Премиальный сервис QSTORE начинается с твоего личного внутреннего спокойствия."
+        ];
 
         const ALL_SESSIONS = [
             { id: 1, title: "Утренний фокус и созерцание", duration: 10, category: "Осознанность", sound: "drone", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
             { id: 2, title: "Глубокое ментальное сканирование", duration: 15, category: "Осознанность", sound: "bell", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
             { id: 3, title: "Погружение в настоящее мгновение", duration: 12, category: "Осознанность", sound: "waves", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-            
             { id: 4, title: "Погружение в дельта-фазу", duration: 40, category: "Сон", sound: "waves", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
             { id: 5, title: "Колыбельная ночного ветра", duration: 25, category: "Сон", sound: "wind", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
-            
             { id: 6, title: "Разгрузка после сложных клиентов", duration: 15, category: "Снижение стресса", sound: "waves", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
             { id: 7, title: "Растворение тревоги и напряжения", duration: 10, category: "Снижение стресса", sound: "wind", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
-            
             { id: 8, title: "Состояние потока и продуктивности", duration: 25, category: "Фокус и концентрация", sound: "wind", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
             { id: 9, title: "Альфа-волны для архитекторов продаж", duration: 20, category: "Фокус и концентрация", sound: "drone", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
-            
             { id: 10, title: "Прилив сил и нейро-мотивация", duration: 8, category: "Энергия", sound: "bell", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3" },
             { id: 11, title: "Заряд бодрости на остаток смены", duration: 12, category: "Энергия", sound: "drone", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" },
-            
             { id: 12, title: "Внутренняя гармония и тепло", duration: 14, category: "Благодарность", sound: "drone", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3" },
             { id: 13, title: "Благодарность уходящему дню", duration: 10, category: "Благодарность", sound: "bell", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" },
-            
             { id: 14, title: "Экспресс-дзен во время перерыва", duration: 5, category: "Быстрое расслабление", sound: "wind", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" },
             { id: 15, title: "Минутка ментального покоя", duration: 3, category: "Быстрое расслабление", sound: "bell", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" }
         ];
@@ -146,115 +144,199 @@
             { id: "quick", title: "Быстрое расслабление", bg: "bg-[#E0F2FE]", iconColor: "text-[#06B6D4]", symbol: "⏳" }
         ];
 
+        // Стабильный высокоинтенсивный аудио-движок живого синтеза
         const AudioEngine = {
-            ctx: null, nodes: [], isPlaying: false,
-            init() {
-                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                if (this.ctx.state === 'suspended') this.ctx.resume();
-            },
-            playAmbient(type) {
-                this.init(); this.stop(); this.isPlaying = true;
-                const mainGain = this.ctx.createGain();
-                mainGain.gain.setValueAtTime(0, this.ctx.currentTime);
-                mainGain.gain.linearRampToValueAtTime(type === 'bell' ? 0.23 : 0.14, this.ctx.currentTime + 2);
-                mainGain.connect(this.ctx.destination);
-                this.nodes.push(mainGain);
+            ctx: null,
+            mainGain: null,
+            subNodes: [],
+            isPlaying: false,
+            currentVolume: 0.25,
 
-                if (type === 'waves') {
-                    const bufferSize = 5 * this.ctx.sampleRate;
-                    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-                    const data = buffer.getChannelData(0);
-                    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-                    const noise = this.ctx.createBufferSource();
-                    noise.buffer = buffer; noise.loop = true;
-                    const filter = this.ctx.createBiquadFilter();
-                    filter.type = 'lowpass'; filter.frequency.setValueAtTime(320, this.ctx.currentTime);
-                    const lfo = this.ctx.createOscillator();
-                    lfo.type = 'sine'; lfo.frequency.setValueAtTime(0.09, this.ctx.currentTime); 
-                    const lfoGain = this.ctx.createGain();
-                    lfoGain.gain.setValueAtTime(200, this.ctx.currentTime);
-                    lfo.connect(lfoGain); lfoGain.connect(filter.frequency);
-                    noise.connect(filter); filter.connect(mainGain);
-                    lfo.start(); noise.start(); this.nodes.push(lfo, noise);
-                } else if (type === 'wind') {
-                    const bufferSize = 4 * this.ctx.sampleRate;
-                    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-                    const data = buffer.getChannelData(0);
-                    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-                    const noise = this.ctx.createBufferSource();
-                    noise.buffer = buffer; noise.loop = true;
-                    const filter = this.ctx.createBiquadFilter();
-                    filter.type = 'bandpass'; filter.Q.setValueAtTime(2.5, this.ctx.currentTime);
-                    const lfo = this.ctx.createOscillator();
-                    lfo.type = 'sine'; lfo.frequency.setValueAtTime(0.12, this.ctx.currentTime);
-                    const lfoGain = this.ctx.createGain();
-                    lfoGain.gain.setValueAtTime(350, this.ctx.currentTime);
-                    filter.frequency.setValueAtTime(750, this.ctx.currentTime);
-                    lfo.connect(lfoGain); lfoGain.connect(filter.frequency);
-                    noise.connect(filter); filter.connect(mainGain);
-                    lfo.start(); noise.start(); this.nodes.push(lfo, noise);
-                } else if (type === 'bell') {
-                    const freqs = [160, 320, 480, 640];
-                    freqs.forEach((f, idx) => {
-                        const osc = this.ctx.createOscillator(); osc.type = 'sine'; osc.frequency.setValueAtTime(f, this.ctx.currentTime);
-                        const mod = this.ctx.createOscillator(); mod.type = 'sine'; mod.frequency.setValueAtTime(0.2 + idx * 0.08, this.ctx.currentTime);
-                        const modGain = this.ctx.createGain(); modGain.gain.setValueAtTime(1.2, this.ctx.currentTime);
-                        const oscGain = this.ctx.createGain(); oscGain.gain.setValueAtTime(0.04 / freqs.length, this.ctx.currentTime);
-                        mod.connect(modGain); modGain.connect(osc.frequency);
-                        osc.connect(oscGain); oscGain.connect(mainGain);
-                        mod.start(); osc.start(); this.nodes.push(mod, osc);
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+
+            playAmbient(type, category = "Осознанность") {
+                this.init();
+                this.stop(); 
+                this.isPlaying = true;
+
+                this.mainGain = this.ctx.createGain();
+                this.mainGain.gain.setValueAtTime(this.currentVolume, this.ctx.currentTime);
+                this.mainGain.connect(this.ctx.destination);
+
+                let isEnergetic = (category === "Энергия" || category === "Фокус и концентрация");
+                let isDeepRelax = (category === "Сон" || category === "Снижение стресса");
+
+                // 1. КОСМОС (DRONE)
+                if (type === 'drone') {
+                    const baseFreqs = isDeepRelax ? [55, 110, 165] : isEnergetic ? [110, 220, 330] : [73, 146, 219];
+                    baseFreqs.forEach((freq, i) => {
+                        const osc = this.ctx.createOscillator();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                        osc.detune.setValueAtTime(i * 4, this.ctx.currentTime);
+
+                        const filter = this.ctx.createBiquadFilter();
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(isDeepRelax ? 170 : 390, this.ctx.currentTime);
+
+                        const volumeNode = this.ctx.createGain();
+                        volumeNode.gain.setValueAtTime(0.40, this.ctx.currentTime);
+
+                        osc.connect(filter);
+                        filter.connect(volumeNode);
+                        volumeNode.connect(this.mainGain);
+                        
+                        osc.start();
+                        this.subNodes.push(osc, filter, volumeNode);
                     });
-                } else {
-                    const baseFreqs = [60, 90, 120, 180];
-                    baseFreqs.forEach((freq) => {
-                        const osc = this.ctx.createOscillator(); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-                        const filter = this.ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.setValueAtTime(110, this.ctx.currentTime);
-                        const oscGain = this.ctx.createGain(); oscGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
-                        osc.connect(filter); filter.connect(oscGain); oscGain.connect(mainGain);
-                        osc.start(); this.nodes.push(osc);
+                } 
+                // 2. ОКЕАН (WAVES)
+                else if (type === 'waves') {
+                    const bufferSize = 3 * this.ctx.sampleRate;
+                    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = Math.random() * 2 - 1;
+                    }
+
+                    const noiseSource = this.ctx.createBufferSource();
+                    noiseSource.buffer = buffer;
+                    noiseSource.loop = true;
+
+                    const filter = this.ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(420, this.ctx.currentTime);
+
+                    const lfo = this.ctx.createOscillator();
+                    lfo.type = 'sine';
+                    lfo.frequency.setValueAtTime(isDeepRelax ? 0.12 : 0.26, this.ctx.currentTime);
+
+                    const lfoGain = this.ctx.createGain();
+                    lfoGain.gain.setValueAtTime(isEnergetic ? 580 : 340, this.ctx.currentTime);
+
+                    const finalNoiseGain = this.ctx.createGain();
+                    finalNoiseGain.gain.setValueAtTime(2.4, this.ctx.currentTime); 
+
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(filter.frequency);
+                    noiseSource.connect(filter);
+                    filter.connect(finalNoiseGain);
+                    finalNoiseGain.connect(this.mainGain);
+
+                    noiseSource.start();
+                    lfo.start();
+                    this.subNodes.push(noiseSource, lfo, filter, lfoGain, finalNoiseGain);
+                } 
+                // 3. ВЕТЕР (WIND)
+                else if (type === 'wind') {
+                    const bufferSize = 3 * this.ctx.sampleRate;
+                    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = Math.random() * 2 - 1;
+                    }
+
+                    const noiseSource = this.ctx.createBufferSource();
+                    noiseSource.buffer = buffer;
+                    noiseSource.loop = true;
+
+                    const filter = this.ctx.createBiquadFilter();
+                    filter.type = 'bandpass';
+                    filter.Q.setValueAtTime(8.0, this.ctx.currentTime);
+                    filter.frequency.setValueAtTime(isEnergetic ? 1150 : 620, this.ctx.currentTime);
+
+                    const windLfo = this.ctx.createOscillator();
+                    windLfo.type = 'sine';
+                    windLfo.frequency.setValueAtTime(0.45, this.ctx.currentTime);
+
+                    const windLfoGain = this.ctx.createGain();
+                    windLfoGain.gain.setValueAtTime(260, this.ctx.currentTime);
+
+                    const windVolume = this.ctx.createGain();
+                    windVolume.gain.setValueAtTime(3.0, this.ctx.currentTime); 
+
+                    windLfo.connect(windLfoGain);
+                    windLfoGain.connect(filter.frequency);
+                    noiseSource.connect(filter);
+                    filter.connect(windVolume);
+                    windVolume.connect(this.mainGain);
+
+                    noiseSource.start();
+                    windLfo.start();
+                    this.subNodes.push(noiseSource, windLfo, filter, windLfoGain, windVolume);
+                } 
+                // 4. ЧАШИ (BELL)
+                else if (type === 'bell') {
+                    const bellScale = isEnergetic ? [329.63, 440.00, 523.25, 659.25] : [220.00, 277.18, 329.63, 440.00];
+                    bellScale.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+                        const tremolo = this.ctx.createOscillator();
+                        tremolo.type = 'sine';
+                        tremolo.frequency.setValueAtTime(0.2 + idx * 0.15, this.ctx.currentTime);
+
+                        const tremoloGain = this.ctx.createGain();
+                        tremoloGain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+
+                        const oscGain = this.ctx.createGain();
+                        oscGain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+
+                        tremolo.connect(tremoloGain);
+                        tremoloGain.connect(oscGain.gain);
+                        osc.connect(oscGain);
+                        oscGain.connect(this.mainGain);
+
+                        osc.start();
+                        tremolo.start();
+                        this.subNodes.push(osc, tremolo, tremoloGain, oscGain);
                     });
                 }
             },
+
             stop() {
-                this.nodes.forEach(node => { try { node.stop(); } catch(e) {} node.disconnect(); });
-                this.nodes = []; this.isPlaying = false;
+                this.subNodes.forEach(node => {
+                    try { node.stop(); } catch(e) {}
+                    try { node.disconnect(); } catch(e) {}
+                });
+                if (this.mainGain) {
+                    try { this.mainGain.disconnect(); } catch(e) {}
+                    this.mainGain = null;
+                }
+                this.subNodes = [];
+                this.isPlaying = false;
             },
+
             setVolume(val) {
-                if (this.nodes[0] && this.nodes[0].gain) this.nodes[0].gain.setTargetAtTime(val, this.ctx.currentTime, 0.1);
+                this.currentVolume = val;
+                if (this.mainGain) {
+                    this.mainGain.gain.setTargetAtTime(val, this.ctx.currentTime, 0.05);
+                }
             }
         };
 
-        const Icon = {
-            Home: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>,
-            Wind: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12.125 4.5V19.5M19.5 12.125H4.5" /></svg>,
-            Play: () => <svg className="w-4 h-4 fill-current text-cyan-600" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>,
-            Pause: () => <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>,
-            Volume: () => <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M15.5 8.5a3 3 0 010 7M18.5 5.5a6.5 6.5 0 010 13M6 9H4.5A1.5 1.5 0 003 10.5v3A1.5 1.5 0 004.5 15H6l4.25 4.25a.75.75 0 001.25-.53V5.28a.75.75 0 00-1.25-.53L6 9z" /></svg>,
-            Bolt: () => <svg className="w-4 h-4 fill-current mr-1.5" viewBox="0 0 24 24"><path d="M11 21h-1l1.5-6.5h-4.5c-.5 0-.8-.3-.9-.5-.1-.2 0-.6.2-.9l7.5-12h1l-1.5 6.5h4.5c.4 0 .7.2.8.5.1.3 0 .7-.2.9l-7.5 12z"/></svg>
-        };
-
-        function IqosMotivationalTicker() {
-            const messages = [
-                "Каждый проданный девайс делает мир вокруг технологичнее и чище!",
-                "Клиенты чувствуют твою уверенность. Выдохни, улыбнись и взорви эту смену!",
-                "Заряжай устройства на витрине и вовремя заряжай свой внутренний аккумулятор.",
-                "Премиальный сервис QSTORE начинается с твоего личного внутреннего спокойствия."
-            ];
+        function DynamicTicker() {
             const [currentIndex, setCurrentIndex] = useState(0);
-            const [key, setKey] = useState(0);
 
             useEffect(() => {
                 const interval = setInterval(() => {
-                    setCurrentIndex((prev) => (prev + 1) % messages.length);
-                    setKey(k => k + 1);
+                    setCurrentIndex((prev) => (prev + 1) % MOTIVATIONAL_MESSAGES.length);
                 }, 7000); 
                 return () => clearInterval(interval);
             }, []);
 
             return (
-                <div className="mt-8 mb-4 text-center px-4 max-w-xl mx-auto">
-                    <div key={key} className="animate-msg text-xs font-semibold italic text-zinc-500 bg-white/60 border border-white/80 backdrop-blur-md py-3 px-5 rounded-2xl shadow-xs">
-                        ✨ {messages[currentIndex]}
+                <div className="w-full text-center px-2">
+                    <div className="text-xs font-semibold italic py-3 px-5 rounded-2xl border text-zinc-500 bg-white/70 border-white/90 backdrop-blur-md transition-all duration-500 shadow-3xs">
+                        ✨ {MOTIVATIONAL_MESSAGES[currentIndex]}
                     </div>
                 </div>
             );
@@ -264,7 +346,6 @@
             const [currentTab, setCurrentTab] = useState('dashboard');
             const [selectedCategoryFilter, setSelectedCategoryFilter] = useState(null);
             const [activePlayerSession, setActivePlayerSession] = useState(null);
-            
             const [userStreak, setUserStreak] = useState(4);
             const [userTotalMinutes, setUserTotalMinutes] = useState(75);
 
@@ -275,9 +356,9 @@
             };
 
             return (
-                <div className="min-h-screen pb-36 pt-6 px-4 max-w-xl mx-auto relative select-none">
+                <div className="min-h-screen pb-36 pt-4 px-4 max-w-xl mx-auto relative flex flex-col justify-between">
                     
-                    <div className="mt-4">
+                    <div className="flex-1">
                         {currentTab === 'dashboard' && (
                             <DashboardView 
                                 streak={userStreak} totalMinutes={userTotalMinutes} 
@@ -290,7 +371,16 @@
                         {currentTab === 'breathwork' && <BreathworkView />}
                     </div>
 
-                    <IqosMotivationalTicker />
+                    <div className="mt-6 mb-2">
+                        <DynamicTicker />
+                    </div>
+
+                    {/* Разработано EGORKIN DEV */}
+                    <footer className="w-full text-center py-6 mt-4 border-t border-zinc-200/40">
+                        <p className="text-[10px] font-black tracking-widest text-zinc-400 uppercase hover:text-zinc-600 transition-colors cursor-default">
+                            Разработано <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-indigo-500 drop-shadow-xs font-black">EGORKIN DEV</span>
+                        </p>
+                    </footer>
 
                     {activePlayerSession && (
                         <MeditationPlayerScreen 
@@ -305,11 +395,13 @@
 
                     <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[88%] max-w-xs">
                         <div className="liquid-glass-dark rounded-[32px] p-1.5 flex items-center justify-between shadow-2xl">
-                            <button onClick={() => { setCurrentTab('dashboard'); setSelectedCategoryFilter(null); }} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-xs transition-all ${currentTab === 'dashboard' ? 'text-cyan-400 bg-white/10' : 'text-zinc-400'}`}>
-                                <Icon.Home /> <span>Главная</span>
+                            <button onClick={() => { setCurrentTab('dashboard'); setSelectedCategoryFilter(null); }} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-xs transition-all ${currentTab === 'dashboard' ? 'text-cyan-400 bg-white/10 shadow-inner' : 'text-zinc-400'}`}>
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+                                <span>Главная</span>
                             </button>
-                            <button onClick={() => setCurrentTab('breathwork')} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-xs transition-all ${currentTab === 'breathwork' ? 'text-cyan-400 bg-white/10' : 'text-zinc-400'}`}>
-                                <Icon.Wind /> <span>Дыхание</span>
+                            <button onClick={() => setCurrentTab('breathwork')} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-xs transition-all ${currentTab === 'breathwork' ? 'text-cyan-400 bg-white/10 shadow-inner' : 'text-zinc-400'}`}>
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12.125 4.5V19.5M19.5 12.125H4.5" /></svg>
+                                <span>Дыхание</span>
                             </button>
                         </div>
                     </nav>
@@ -319,8 +411,6 @@
 
         function DashboardView({ streak, totalMinutes, activeCategory, setActiveCategory, onStart, onQuickStart, setTab }) {
             const displayedSessions = activeCategory ? ALL_SESSIONS.filter(s => s.category === activeCategory) : ALL_SESSIONS;
-            
-            // Ссылка для автоскролла вниз к началу списка треков
             const trackSectionRef = useRef(null);
 
             const handleDirectionClick = (dir) => {
@@ -330,19 +420,17 @@
                     const nextCategory = activeCategory === dir.title ? null : dir.title;
                     setActiveCategory(nextCategory);
                     
-                    // Если категория выбрана — плавно скроллим к трекам
                     if (nextCategory) {
                         setTimeout(() => {
                             trackSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
+                        }, 120);
                     }
                 }
             };
 
             return (
-                <div className="space-y-8 text-center">
+                <div className="space-y-8 text-center animate-fade-in">
                     
-                    {/* Статистика */}
                     <div className="liquid-glass rounded-[32px] p-6 flex flex-col items-center border border-white shadow-md">
                         <span className="text-[11px] font-extrabold tracking-widest text-cyan-600 bg-cyan-50 px-4 py-1.5 rounded-full mb-3">Команда QSTORE</span>
                         <h1 className="text-3xl font-black tracking-tight mb-2"><span className="text-black">QSTORE</span> <span className="text-cyan-500">ZEN</span></h1>
@@ -354,47 +442,39 @@
                             <div className="flex-1"><span className="block text-xl font-black text-zinc-900">{totalMinutes}</span><span className="text-[9px] font-bold text-zinc-400 uppercase">Всего минут</span></div>
                         </div>
 
-                        <button 
-                            onClick={onQuickStart} 
-                            className="flex items-center justify-center w-full max-w-xs py-3.5 bg-gradient-to-r from-zinc-900 to-zinc-800 text-white font-bold text-xs rounded-2xl shadow-md apple-spring uppercase tracking-wider"
-                        >
-                            <Icon.Bolt /> Быстрый старт релаксации
+                        <button onClick={onQuickStart} className="flex items-center justify-center w-full max-w-xs py-3.5 bg-gradient-to-r from-zinc-900 to-zinc-800 text-white font-bold text-xs rounded-2xl shadow-md apple-spring uppercase tracking-wider">
+                            🚀 Быстрый старт релаксации
                         </button>
                     </div>
 
-                    {/* Направления (Фикс бага из IMG_9414.jpeg — заголовок больше не ломается!) */}
                     <div className="space-y-4">
                         <div className="flex items-center justify-between px-1 h-9">
-                            <h2 className="text-lg font-extrabold text-zinc-900 tracking-tight whitespace-nowrap">
-                                Выберите направление
-                            </h2>
+                            <h2 className="text-lg font-extrabold text-zinc-900 tracking-tight whitespace-nowrap">Выберите направление</h2>
                             {activeCategory && (
-                                <button 
-                                    onClick={() => setActiveCategory(null)} 
-                                    className="text-[11px] font-bold text-cyan-600 bg-white px-3 py-1.5 rounded-full shadow-xs border border-zinc-200/60 active:scale-95 transition-all whitespace-nowrap ml-2 animate-msg"
-                                >
+                                <button onClick={() => setActiveCategory(null)} className="text-[11px] font-bold text-cyan-600 bg-white px-3 py-1.5 rounded-full shadow-xs border border-zinc-200/60 active:scale-95 transition-all whitespace-nowrap ml-2 animate-fade-in">
                                     Сбросить ×
                                 </button>
                             )}
                         </div>
                         
                         <div className="grid grid-cols-2 gap-3.5">
-                            {DIRECTIONS.map((dir) => {
+                            {DIRECTIONS.map((dir, index) => {
                                 const isSelected = activeCategory === dir.title;
                                 return (
                                     <div 
                                         key={dir.id}
                                         onClick={() => handleDirectionClick(dir)}
-                                        className={`bg-white/95 rounded-[28px] p-5 flex flex-col items-center justify-center text-center aspect-square border apple-spring cursor-pointer select-none transition-all duration-200 ${
+                                        style={{ animationDelay: `${index * 40}ms` }}
+                                        className={`bg-white/95 rounded-[28px] p-5 flex flex-col items-center justify-center text-center aspect-square border apple-spring cursor-pointer select-none transition-all duration-300 animate-fade-in ${
                                             isSelected 
-                                                ? 'border-zinc-900 bg-zinc-50/50 shadow-inner scale-[0.97]' 
-                                                : 'border-zinc-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.015)]'
+                                                ? 'border-zinc-900 bg-zinc-50/80 shadow-inner scale-[0.96] ring-4 ring-zinc-900/5' 
+                                                : 'border-zinc-100 shadow-[0_4px_25px_rgba(0,0,0,0.01)]'
                                         }`}
                                     >
-                                        <div className={`w-12 h-12 ${dir.bg} ${dir.iconColor} rounded-2xl flex items-center justify-center text-xl font-bold mb-4 shadow-3xs transition-transform ${isSelected ? 'scale-105' : ''}`}>
+                                        <div className={`w-12 h-12 ${dir.bg} ${dir.iconColor} rounded-2xl flex items-center justify-center text-xl font-bold mb-4 shadow-2xs transition-transform ${isSelected ? 'scale-110 rotate-3' : ''}`}>
                                             {dir.symbol}
                                         </div>
-                                        <span className={`text-[13px] font-bold leading-snug px-1 transition-colors ${isSelected ? 'text-zinc-950 font-extrabold' : 'text-zinc-800'}`}>
+                                        <span className={`text-[13px] font-bold leading-snug px-1 transition-colors ${isSelected ? 'text-zinc-950 font-black' : 'text-zinc-800'}`}>
                                             {dir.title}
                                         </span>
                                     </div>
@@ -403,36 +483,30 @@
                         </div>
                     </div>
 
-                    {/* Список треков с якорем для автоскролла */}
                     <div ref={trackSectionRef} className="space-y-3 text-left pt-2 scroll-mt-6">
                         <h3 className="text-xs font-extrabold text-zinc-400 uppercase tracking-wider px-1">
                             {activeCategory ? `Программы: ${activeCategory}` : 'Все доступные сессии'} ({displayedSessions.length})
                         </h3>
                         
-                        <div className="space-y-2.5 max-h-[400px] overflow-y-auto pr-1 scrollbar-none pb-4">
-                            {displayedSessions.map((session) => (
+                        <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1 scrollbar-none pb-4">
+                            {displayedSessions.map((session, sIdx) => (
                                 <div 
                                     key={session.id} 
                                     onClick={() => onStart(session)} 
-                                    className="liquid-glass bg-white/80 hover:bg-white rounded-2xl p-4 flex items-center justify-between cursor-pointer apple-spring shadow-2xs border border-white group"
+                                    style={{ animationDelay: `${sIdx * 30}ms` }}
+                                    className="liquid-glass bg-white/80 hover:bg-white rounded-2xl p-4 flex items-center justify-between cursor-pointer apple-spring shadow-2xs border border-white group animate-fade-in"
                                 >
                                     <div className="space-y-1 pr-4 truncate">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[9px] font-extrabold text-cyan-600 bg-cyan-50/70 px-2 py-0.5 rounded uppercase">
-                                                {session.category}
-                                            </span>
-                                        </div>
-                                        <h4 className="font-bold text-zinc-900 text-xs sm:text-sm truncate group-hover:text-cyan-600 transition-colors">
-                                            {session.title}
-                                        </h4>
+                                        <span className="text-[9px] font-extrabold text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded uppercase">{session.category}</span>
+                                        <h4 className="font-bold text-zinc-900 text-xs sm:text-sm truncate group-hover:text-cyan-600 transition-colors">{session.title}</h4>
                                         <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-medium">
                                             <span>⏱ {session.duration} мин</span>
                                             <span>•</span>
-                                            <span>🔊 {SOUND_NAMES[session.sound]}</span>
+                                            <span>{SOUND_NAMES[session.sound]}</span>
                                         </div>
                                     </div>
                                     <div className="w-8 h-8 rounded-full bg-zinc-50 group-hover:bg-cyan-50 flex items-center justify-center text-zinc-400 group-hover:text-cyan-600 transition-all shrink-0">
-                                        <Icon.Play />
+                                        <svg className="w-4 h-4 fill-current text-cyan-600" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                     </div>
                                 </div>
                             ))}
@@ -465,7 +539,7 @@
             }, [active]);
 
             return (
-                <div className="max-w-md mx-auto text-center space-y-6 pt-4">
+                <div className="max-w-md mx-auto text-center space-y-6 pt-4 animate-fade-in">
                     <h2 className="text-xl font-black text-zinc-900">Антистресс-дыхание</h2>
                     <div className="liquid-glass bg-white rounded-[40px] aspect-square max-w-[240px] mx-auto flex flex-col justify-center items-center relative shadow-xs">
                         {active && (
@@ -477,7 +551,7 @@
                         <h3 className="text-base font-bold z-10 text-zinc-800">{active ? phase : 'Квадрат баланса'}</h3>
                         <div className="text-4xl font-light mt-2 z-10 tabular-nums">{timer}с</div>
                     </div>
-                    <button onClick={() => { setActive(!active); if(!active) AudioEngine.playAmbient('wind'); else AudioEngine.stop(); }} className="w-full max-w-[180px] py-3.5 bg-zinc-950 text-white rounded-full font-bold shadow-lg apple-spring text-xs uppercase tracking-wider">
+                    <button onClick={() => { setActive(!active); if(!active) AudioEngine.playAmbient('wind', 'Дыхательные практики'); else AudioEngine.stop(); }} className="w-full max-w-[180px] py-3.5 bg-zinc-950 text-white rounded-full font-bold shadow-lg apple-spring text-xs uppercase tracking-wider">
                         {active ? 'Остановить' : 'Начать практику'}
                     </button>
                 </div>
@@ -487,7 +561,7 @@
         function MeditationPlayerScreen({ session, onClose, onComplete }) {
             const [isPlaying, setIsPlaying] = useState(true);
             const [secondsRemaining, setSecondsRemaining] = useState(session.duration * 60);
-            const [soundVolume, setSoundVolume] = useState(0.20);
+            const [soundVolume, setSoundVolume] = useState(0.25);
             const [soundType, setSoundType] = useState(session.sound || 'drone');
             const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
 
@@ -506,8 +580,8 @@
 
                 if (isPlaying) {
                     streamMusicRef.current.play().catch(()=>{});
-                    AudioEngine.playAmbient(soundType);
                     AudioEngine.setVolume(soundVolume);
+                    AudioEngine.playAmbient(soundType, session.category);
                 }
 
                 return () => {
@@ -519,8 +593,8 @@
 
             useEffect(() => {
                 if (isPlaying) {
-                    AudioEngine.playAmbient(soundType);
                     AudioEngine.setVolume(soundVolume);
+                    AudioEngine.playAmbient(soundType, session.category);
                     if (streamMusicRef.current) streamMusicRef.current.play().catch(()=>{});
                 } else {
                     AudioEngine.stop();
@@ -568,69 +642,105 @@
                 return () => clearInterval(sessionTimer);
             }, [isPlaying, isVoiceEnabled, secondsRemaining]);
 
+            const changeNoiseDirectly = (type) => {
+                setSoundType(type);
+                if (isPlaying) {
+                    AudioEngine.playAmbient(type, session.category);
+                }
+            };
+
             const progressPercentage = (((session.duration * 60) - secondsRemaining) / (session.duration * 60)) * 100;
+            const isEnergeticMode = (session.category === "Энергия" || session.category === "Фокус и концентрация");
 
             return (
-                <div className="fixed inset-0 z-50 bg-slate-50/95 backdrop-blur-3xl flex flex-col justify-between p-6 text-center">
-                    <div className="flex items-center justify-between w-full max-w-md mx-auto">
+                <div className="fixed inset-0 z-50 bg-[#F4F5F9]/95 backdrop-blur-3xl flex flex-col justify-between p-6 text-center animate-fade-in overflow-y-auto scrollbar-none text-zinc-900">
+                    
+                    {/* Верхняя светлая панель навигации */}
+                    <div className="flex items-center justify-between w-full max-w-md mx-auto shrink-0">
                         <button onClick={() => { AudioEngine.stop(); if (voiceAudioRef.current) voiceAudioRef.current.pause(); if(streamMusicRef.current) streamMusicRef.current.pause(); onClose(); }} className="bg-zinc-200/80 text-zinc-900 px-5 py-2.5 rounded-full text-xs font-bold apple-spring">Назад</button>
                         <div className="text-center truncate max-w-[180px]">
                             <h2 className="font-extrabold text-zinc-900 text-xs truncate">{session.title}</h2>
-                            <span className="text-[9px] font-bold text-cyan-600 block mt-0.5">Трек №{session.id}</span>
+                            <span className="text-[9px] font-bold text-cyan-600 block mt-0.5">Режим: {session.category}</span>
                         </div>
                         <button onClick={() => { AudioEngine.stop(); if (voiceAudioRef.current) voiceAudioRef.current.pause(); if(streamMusicRef.current) streamMusicRef.current.pause(); onComplete(session.duration); }} className="bg-zinc-900 text-white px-5 py-2.5 rounded-full text-xs font-bold apple-spring">Готово</button>
                     </div>
 
-                    <div className="flex-1 flex flex-col items-center justify-center relative">
-                        {isPlaying && <div className="absolute w-60 h-60 rounded-full bg-gradient-to-tr from-cyan-400/20 to-purple-500/20 blur-md visual-wave-1 pointer-events-none" />}
+                    {/* Светлая Сфера визуализации и эквалайзер */}
+                    <div className="flex-1 flex flex-col items-center justify-center relative my-4 min-h-[200px]">
+                        {isPlaying && <div className="absolute w-64 h-64 rounded-full bg-gradient-to-tr from-cyan-400/20 to-purple-500/20 blur-xl visual-wave-1 pointer-events-none" />}
                         
-                        <div className="w-48 h-48 rounded-full liquid-glass flex flex-col items-center justify-center shadow-lg border border-white z-10">
+                        <div className="w-44 h-44 rounded-full liquid-glass flex flex-col items-center justify-center shadow-md border border-white z-10 relative">
                             <span className="text-4xl font-light tabular-nums text-zinc-900">{Math.floor(secondsRemaining / 60)}:{String(secondsRemaining % 60).padStart(2, '0')}</span>
-                            <span className="text-[10px] font-black text-zinc-400 uppercase mt-1 tracking-wider">Осталось</span>
+                            
+                            {isPlaying && (
+                                <div className="flex items-end gap-1.5 h-6 mt-3">
+                                    <div className={`w-1 bg-cyan-500 rounded-full eq-bar ${isEnergeticMode ? 'eq-fast' : 'eq-slow'}`} style={{height: '100%'}}></div>
+                                    <div className={`w-1 bg-indigo-500 rounded-full eq-bar ${isEnergeticMode ? 'eq-fast' : ''}`} style={{height: '70%', animationDelay: '0.2s'}}></div>
+                                    <div className={`w-1 bg-purple-500 rounded-full eq-bar ${isEnergeticMode ? 'eq-fast' : 'eq-slow'}`} style={{height: '40%', animationDelay: '0.4s'}}></div>
+                                    <div className={`w-1 bg-cyan-500 rounded-full eq-bar ${isEnergeticMode ? 'eq-fast' : ''}`} style={{height: '80%', animationDelay: '0.1s'}}></div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    <div className="w-full max-w-sm mx-auto space-y-5 mb-4 z-10">
-                        <div className="w-full bg-zinc-200 rounded-full h-1.5 overflow-hidden pointer-events-none">
+                    {/* Панель управления (Светлый дизайн) */}
+                    <div className="w-full max-w-sm mx-auto space-y-5 shrink-0">
+                        <div className="w-full bg-zinc-200 rounded-full h-1.5 overflow-hidden">
                             <div style={{ width: `${progressPercentage}%` }} className="bg-gradient-to-r from-cyan-500 to-indigo-500 h-full progress-fill" />
                         </div>
 
                         <div className="flex items-center justify-center">
                             <button onClick={() => setIsPlaying(!isPlaying)} className="w-16 h-16 rounded-full bg-zinc-950 text-white flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform">
-                                {isPlaying ? <Icon.Pause /> : <Icon.Play />}
+                                {isPlaying ? (
+                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                ) : (
+                                    <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                )}
                             </button>
                         </div>
 
-                        <div className="bg-white border border-zinc-100 rounded-3xl p-4 space-y-4 shadow-sm">
+                        <div className="bg-white border border-zinc-200/60 rounded-3xl p-4 space-y-4 shadow-sm text-left">
                             <div>
-                                <span className="block text-left text-[9px] font-black text-zinc-400 uppercase tracking-wider mb-2">Генерируемый био-шум</span>
-                                <div className="grid grid-cols-4 gap-1.5 text-[11px] font-bold">
-                                    {['drone', 'waves', 'wind', 'bell'].map((snd) => (
-                                        <button key={snd} onClick={() => { setSoundType(snd); if(isPlaying) AudioEngine.playAmbient(snd); }} className={`py-2 rounded-xl transition-all ${soundType === snd ? 'bg-zinc-900 text-white shadow-xs' : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'}`}>
-                                            {SOUND_NAMES[snd]}
-                                        </button>
-                                    ))}
+                                <span className="block text-[9px] font-black text-zinc-400 uppercase tracking-wider mb-2">Генерируемый био-шум (Живой синтез)</span>
+                                <div className="grid grid-cols-2 gap-2 text-[12px] font-bold">
+                                    {['drone', 'waves', 'wind', 'bell'].map((snd) => {
+                                        const isSelected = soundType === snd;
+                                        return (
+                                            <button 
+                                                key={snd} 
+                                                onClick={() => changeNoiseDirectly(snd)} 
+                                                className={`py-3 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 border active:scale-95 ${
+                                                    isSelected 
+                                                        ? 'bg-zinc-900 text-white border-zinc-900 shadow-md font-black' 
+                                                        : 'bg-zinc-100 text-zinc-600 border-transparent hover:bg-zinc-200'
+                                                }`}
+                                            >
+                                                {SOUND_NAMES[snd]}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
 
                             <div className="pt-3 border-t border-zinc-100 flex items-center justify-between">
-                                <div className="text-left">
-                                    <span className="block text-xs font-bold text-zinc-800">Озвучка гида</span>
-                                </div>
-                                <button 
-                                    onClick={() => setIsVoiceEnabled(!isVoiceEnabled)}
-                                    className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-300 ${isVoiceEnabled ? 'bg-cyan-500' : 'bg-zinc-200'}`}
-                                >
+                                <span className="text-xs font-bold text-zinc-800">Озвучка гида (Нейро-сопровождение)</span>
+                                <button onClick={() => setIsVoiceEnabled(!isVoiceEnabled)} className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-300 ${isVoiceEnabled ? 'bg-cyan-500' : 'bg-zinc-200'}`}>
                                     <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform duration-300 ${isVoiceEnabled ? 'translate-x-6' : 'translate-x-1'}`} />
                                 </button>
                             </div>
 
                             <div className="flex items-center gap-3 pt-1">
-                                <Icon.Volume />
-                                <input type="range" min="0" max="0.5" step="0.05" value={soundVolume} onChange={(e) => { const nv = parseFloat(e.target.value); setSoundVolume(nv); AudioEngine.setVolume(nv); if(streamMusicRef.current) streamMusicRef.current.volume = nv * 2.5; }} className="w-full h-1 bg-zinc-200 appearance-none cursor-pointer accent-zinc-900" />
+                                <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M15.5 8.5a3 3 0 010 7M18.5 5.5a6.5 6.5 0 010 13M6 9H4.5A1.5 1.5 0 003 10.5v3A1.5 1.5 0 004.5 15H6l4.25 4.25a.75.75 0 00-1.25-.53V5.28a.75.75 0 00-1.25-.53L6 9z" /></svg>
+                                <input type="range" min="0" max="0.6" step="0.05" value={soundVolume} onChange={(e) => { const nv = parseFloat(e.target.value); setSoundVolume(nv); AudioEngine.setVolume(nv); if(streamMusicRef.current) streamMusicRef.current.volume = nv * 2.0; }} className="w-full h-1 bg-zinc-200 appearance-none cursor-pointer accent-zinc-900 rounded-lg" />
                             </div>
                         </div>
                     </div>
+
+                    {/* Мотивационный текст QSTORE встроен прямо снизу в плеер */}
+                    <div className="mt-4 shrink-0 max-w-sm mx-auto w-full">
+                        <DynamicTicker />
+                    </div>
+
                 </div>
             );
         }
