@@ -1,0 +1,585 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QSTORE ZEN -- Premium AI Релакс</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F4F4F7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            color: #1D1D1F;
+        }
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .liquid-glass-dark {
+            background: rgba(24, 24, 27, 0.9);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        .mesh-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: #F9FAFC;
+            overflow: hidden;
+        }
+        .liquid-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            mix-blend-mode: multiply;
+            animation: floatingMesh 25s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
+        }
+        .orb-blue {
+            width: 600px; height: 600px; top: -100px; left: -100px;
+            background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, rgba(255,255,255,0) 70%);
+        }
+        .orb-purple {
+            width: 700px; height: 700px; bottom: -150px; right: -100px;
+            background: radial-gradient(circle, rgba(147,51,234,0.12) 0%, rgba(255,255,255,0) 70%);
+            animation-delay: -5s;
+        }
+        @keyframes floatingMesh {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, -40px) scale(1.1); }
+            100% { transform: translate(-20px, 40px) scale(0.95); }
+        }
+        .apple-spring {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .apple-spring:hover { transform: translateY(-4px) scale(1.02); }
+        .apple-spring:active { transform: scale(0.97); }
+        .progress-fill { transition: width 0.4s ease-out; }
+        @keyframes opacityFade {
+            0% { opacity: 0; transform: translateY(4px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-msg { animation: opacityFade 0.5s ease-out forwards; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <div class="mesh-background">
+        <div class="liquid-orb orb-blue"></div>
+        <div class="liquid-orb orb-purple"></div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // =========================================================
+        // СЮДА ПОДСТАВЬТЕ ССЫЛКИ НА ВАШИ MP3 С НЕЙРОСЕТЯМИ (AI)
+        // Если оставить "ссылка", плеер просто пропустит речевую фразу
+        // =========================================================
+        const VOICE_TRACKS = {
+            female: {
+                intro: "https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg", // Временная заглушка-звук
+                phrases: [
+                    "ссылка_на_женскую_фразу_1.mp3",
+                    "ссылка_на_женскую_фразу_2.mp3",
+                    "ссылка_на_женскую_фразу_3.mp3",
+                    "ссылка_на_женскую_фразу_4.mp3",
+                    "ссылка_на_женскую_фразу_5.mp3",
+                    "ссылка_на_женскую_фразу_6.mp3",
+                    "ссылка_на_женскую_фразу_7.mp3",
+                    "ссылка_на_женскую_фразу_8.mp3"
+                ]
+            },
+            male: {
+                intro: "https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg", // Временная заглушка-звук
+                phrases: [
+                    "ссылка_на_мужскую_фразу_1.mp3",
+                    "ссылка_на_мужскую_фразу_2.mp3",
+                    "ссылка_на_мужскую_фразу_3.mp3",
+                    "ссылка_на_мужскую_фразу_4.mp3",
+                    "ссылка_на_мужскую_фразу_5.mp3",
+                    "ссылка_на_мужскую_фразу_6.mp3",
+                    "ссылка_на_мужскую_фразу_7.mp3",
+                    "ссылка_на_мужскую_фразу_8.mp3"
+                ]
+            }
+        };
+
+        // --- ДВИЖОК МУЗЫКАЛЬНОГО ФОНА ---
+        const AudioEngine = {
+            ctx: null, nodes: [], isPlaying: false,
+            init() {
+                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+            },
+            playAmbient(type) {
+                this.init(); this.stop(); this.isPlaying = true;
+                const mainGain = this.ctx.createGain();
+                mainGain.gain.setValueAtTime(0, this.ctx.currentTime);
+                mainGain.gain.linearRampToValueAtTime(type === 'bell' ? 0.35 : 0.2, this.ctx.currentTime + 1.5);
+                mainGain.connect(this.ctx.destination);
+                this.nodes.push(mainGain);
+
+                if (type === 'waves' || type === 'wind') {
+                    const bufferSize = 4 * this.ctx.sampleRate;
+                    const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                    const output = noiseBuffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+                    const noiseNode = this.ctx.createBufferSource();
+                    noiseNode.buffer = noiseBuffer; noiseNode.loop = true;
+                    const filter = this.ctx.createBiquadFilter();
+                    filter.type = 'lowpass'; filter.frequency.setValueAtTime(400, this.ctx.currentTime);
+                    const sweepOsc = this.ctx.createOscillator();
+                    sweepOsc.type = 'sine'; sweepOsc.frequency.setValueAtTime(type === 'waves' ? 0.12 : 0.07, this.ctx.currentTime); 
+                    const sweepGain = this.ctx.createGain();
+                    sweepGain.gain.setValueAtTime(type === 'waves' ? 200 : 100, this.ctx.currentTime);
+                    sweepOsc.connect(sweepGain); sweepGain.connect(filter.frequency);
+                    noiseNode.connect(filter); filter.connect(mainGain);
+                    sweepOsc.start(); noiseNode.start();
+                    this.nodes.push(sweepOsc, noiseNode);
+                } else {
+                    const roots = type === 'bell' ? [146.83, 220.00, 293.66, 440.00] : [110.00, 165.00, 220.00, 330.00];
+                    roots.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                        const lfo = this.ctx.createOscillator();
+                        lfo.type = 'sine'; lfo.frequency.setValueAtTime(0.2 + idx * 0.05, this.ctx.currentTime);
+                        const lfoGain = this.ctx.createGain(); lfoGain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+                        const oscGain = this.ctx.createGain(); oscGain.gain.setValueAtTime(0.05 / roots.length, this.ctx.currentTime);
+                        lfo.connect(lfoGain); lfoGain.connect(osc.frequency);
+                        osc.connect(oscGain); oscGain.connect(mainGain);
+                        lfo.start(); osc.start();
+                        this.nodes.push(lfo, osc);
+                    });
+                }
+            },
+            stop() {
+                if (this.nodes.length > 0) {
+                    this.nodes.forEach(node => {
+                        try { node.stop(); } catch(e) {}
+                        try { node.disconnect(); } catch(e) {}
+                    });
+                    this.nodes = [];
+                }
+                this.isPlaying = false;
+            },
+            setVolume(val) {
+                if (this.nodes.length > 0 && this.nodes[0] && this.nodes[0].gain) {
+                    this.nodes[0].gain.setValueAtTime(val, this.ctx.currentTime);
+                }
+            }
+        };
+
+        // --- ДВИЖОК КРАСИВОГО МЕДИАТИВНОГО MP3 ГОЛОСА ---
+        const NeuralVoicePlayer = {
+            activeAudio: null,
+            playFile(url) {
+                this.stop();
+                if(!url || url.includes("ссылка") || url === "") return;
+                try {
+                    this.activeAudio = new Audio(url);
+                    this.activeAudio.volume = 0.65; // Идеальный тихий баланс поверх музыки
+                    this.activeAudio.play().catch(e => console.log("Кастомный голос ожидает клика"));
+                } catch(err) {
+                    console.error("Ошибка воспроизведения аудиофайла", err);
+                }
+            },
+            stop() {
+                if (this.activeAudio) {
+                    this.activeAudio.pause();
+                    this.activeAudio = null;
+                }
+            }
+        };
+
+        // --- ИКОНКИ ---
+        const Icon = {
+            Home: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>,
+            Wind: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12.125 4.5V19.5M19.5 12.125H4.5" /></svg>,
+            Play: () => <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>,
+            Pause: () => <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>,
+            Sparkles: () => <svg className="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 21l-.813-5.096L3 15l5.187-.813L9 9l.813 5.187L14 15l-4.187.814z" /></svg>,
+            Moon: () => <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>,
+            Brain: () => <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925-3.546 5.974 5.974 0 01-2.133 1A3.75 3.75 0 0012 18z" /></svg>,
+            Energy: () => <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>,
+            Heart: () => <svg className="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>,
+            Backward: () => <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg>,
+            Forward: () => <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.5 12L4 6v12l8.5-6zm9 0L13 6v12l8.5-6z"/></svg>,
+            Volume: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M15.5 8.5a3 3 0 010 7M18.5 5.5a6.5 6.5 0 010 13M6 9H4.5A1.5 1.5 0 003 10.5v3A1.5 1.5 0 004.5 15H6l4.25 4.25a.75.75 0 001.25-.53V5.28a.75.75 0 00-1.25-.53L6 9z" /></svg>
+        };
+
+        const ALL_SESSIONS = [
+            { id: 1, title: "Утренняя перезагрузка перед сменой", duration: 10, category: "Осознанность", sound: "drone", typeStr: "Медитация" },
+            { id: 2, title: "Отдых после работы с клиентами", duration: 20, category: "Снижение стресса", sound: "waves", typeStr: "Аудиорелакс" },
+            { id: 3, title: "Мгновенный сброс напряжения", duration: 5, category: "Быстрое расслабление", sound: "wind", typeStr: "Экспресс" },
+            { id: 4, title: "Фокус эксперта", duration: 15, category: "Фокус и концентрация", sound: "drone", typeStr: "Продуктивность" },
+            { id: 5, title: "Энергия для новых продаж", duration: 8, category: "Энергия", sound: "bell", typeStr: "Тонус" },
+            { id: 6, title: "Глубокий сон после смены", duration: 12, category: "Сон", sound: "drone", typeStr: "Гармония" },
+            { id: 7, title: "Антикризис: Спокойствие", duration: 3, category: "Быстрое расслабление", sound: "wind", typeStr: "Антипаника" },
+            { id: 8, title: "Дыхание ровный ритм", duration: 7, category: "Дыхательные практики", sound: "bell", typeStr: "Дыхание" }
+        ];
+
+        function IqosMotivationalTicker() {
+            const messages = [
+                "Каждый проданный девайс делает мир вокруг технологичнее и чище!",
+                "Клиенты чувствуют твою уверенность. Выдохни, улыбнись и взорви эту смену!",
+                "Заряжай устройства на витрине и вовремя заряжай свой внутренний аккумулятор.",
+                "Стики и девайсы разлетаются быстрее, когда эксперт излучает абсолютный дзен!",
+                "Премиальный сервис QSTORE начинается с твоего личного внутреннего спокойствия."
+            ];
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [key, setKey] = useState(0);
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setCurrentIndex((prev) => (prev + 1) % messages.length);
+                    setKey(k => k + 1);
+                }, 6000); 
+                return () => clearInterval(interval);
+            }, []);
+
+            return (
+                <div className="mt-14 mb-4 text-center px-4 max-w-lg mx-auto">
+                    <div key={key} className="animate-msg text-xs font-semibold italic text-zinc-500 bg-white/50 border border-white/60 backdrop-blur-md py-3 px-5 rounded-2xl shadow-xs">
+                        ✨ {messages[currentIndex]}
+                    </div>
+                </div>
+            );
+        }
+
+        function PremiumZenApp() {
+            const [currentTab, setCurrentTab] = useState('dashboard');
+            const [islandNotice, setIslandNotice] = useState(null);
+            const [activePlayerSession, setActivePlayerSession] = useState(null);
+            const [selectedCategoryFilter, setSelectedCategoryFilter] = useState(null);
+            
+            const [userStreak, setUserStreak] = useState(4);
+            const [userTotalMinutes, setUserTotalMinutes] = useState(60);
+            const [completedToday, setCompletedToday] = useState([
+                { title: "Фокус эксперта", duration: 15, time: "11:40" }
+            ]);
+
+            const triggerIslandNotice = (msg) => {
+                setIslandNotice(null);
+                setTimeout(() => setIslandNotice(msg), 50);
+            };
+
+            useEffect(() => {
+                if (islandNotice) {
+                    const timer = setTimeout(() => setIslandNotice(null), 3500);
+                    return () => clearTimeout(timer);
+                }
+            }, [islandNotice]);
+
+            const startMeditationSession = (session) => {
+                setActivePlayerSession(session);
+                triggerIslandNotice(`Запуск: «${session.title}»`);
+            };
+
+            const completeSessionMetrics = (session, totalCompletedMins) => {
+                setUserTotalMinutes(prev => prev + totalCompletedMins);
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                setCompletedToday(prev => [{ title: session.title, duration: totalCompletedMins, time: timeStr }, ...prev]);
+                setUserStreak(prev => (prev === 0 ? 1 : prev));
+                setActivePlayerSession(null);
+                triggerIslandNotice(`Выполнено! +${totalCompletedMins} мин к прогрессу`);
+            };
+
+            return (
+                <div className="min-h-screen pb-36 pt-6 px-4 max-w-5xl mx-auto relative select-none">
+                    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-full max-w-xs sm:max-w-sm px-4">
+                        <div className={`mx-auto bg-zinc-900 text-white rounded-full transition-all duration-500 ease-out ${
+                            islandNotice ? 'py-3 px-6 opacity-100 scale-100 shadow-xl' : 'py-0 px-0 opacity-0 scale-95 h-0 overflow-hidden'
+                        }`}>
+                            <div className="flex items-center gap-2.5 justify-center text-center">
+                                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse shrink-0" />
+                                <span className="text-xs sm:text-sm font-medium text-zinc-200 truncate">{islandNotice}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-4">
+                        {currentTab === 'dashboard' && (
+                            <DashboardView 
+                                streak={userStreak} totalMinutes={userTotalMinutes} completedToday={completedToday}
+                                activeCategory={selectedCategoryFilter} setActiveCategory={setSelectedCategoryFilter}
+                                onStart={startMeditationSession} triggerNotice={triggerIslandNotice}
+                            />
+                        )}
+                        {currentTab === 'breathwork' && <BreathworkView triggerNotice={triggerIslandNotice} />}
+                    </div>
+
+                    <IqosMotivationalTicker />
+
+                    {activePlayerSession && (
+                        <MeditationPlayerScreen 
+                            session={activePlayerSession}
+                            onClose={() => { AudioEngine.stop(); NeuralVoicePlayer.stop(); setActivePlayerSession(null); }}
+                            onComplete={(mins) => completeSessionMetrics(activePlayerSession, mins)}
+                        />
+                    )}
+
+                    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[88%] max-w-xs">
+                        <div className="liquid-glass-dark rounded-full p-1.5 flex items-center justify-between shadow-2xl">
+                            <button 
+                                onClick={() => { setCurrentTab('dashboard'); setSelectedCategoryFilter(null); }}
+                                className={`flex-1 flex flex-col items-center gap-1 py-2.5 rounded-full transition-all ${currentTab === 'dashboard' ? 'text-cyan-400 bg-white/10 scale-105 font-bold' : 'text-zinc-400'}`}
+                            >
+                                <Icon.Home /> <span className="text-[11px] tracking-tight">Главная</span>
+                            </button>
+                            <button 
+                                onClick={() => setCurrentTab('breathwork')}
+                                className={`flex-1 flex flex-col items-center gap-1 py-2.5 rounded-full transition-all ${currentTab === 'breathwork' ? 'text-cyan-400 bg-white/10 scale-105 font-bold' : 'text-zinc-400'}`}
+                            >
+                                <Icon.Wind /> <span className="text-[11px] tracking-tight">Дыхание</span>
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            );
+        }
+
+        function DashboardView({ streak, totalMinutes, completedToday, activeCategory, setActiveCategory, onStart, triggerNotice }) {
+            const categoriesDef = [
+                { title: 'Осознанность', icon: <Icon.Sparkles />, bg: 'from-cyan-500/20 to-blue-500/20' },
+                { title: 'Сон', icon: <Icon.Moon />, bg: 'from-indigo-500/20 to-purple-500/20' },
+                { title: 'Снижение стресса', icon: <Icon.Wind />, bg: 'from-teal-500/20 to-emerald-500/20' },
+                { title: 'Фокус и концентрация', icon: <Icon.Brain />, bg: 'from-purple-500/20 to-pink-500/20' }
+            ];
+            const displayedSessions = activeCategory ? ALL_SESSIONS.filter(s => s.category === activeCategory) : ALL_SESSIONS;
+
+            return (
+                <div className="space-y-10 text-center">
+                    <div className="liquid-glass rounded-[32px] p-8 flex flex-col items-center justify-center border border-white shadow-lg">
+                        <span className="text-[11px] font-extrabold tracking-widest text-cyan-600 bg-cyan-50 px-4 py-1.5 rounded-full mb-4">Команда QSTORE</span>
+                        <h1 className="text-4xl font-black tracking-tight mb-4"><span className="text-black">QSTORE</span> <span className="text-cyan-550 text-cyan-500">ZEN</span></h1>
+                        <p className="text-zinc-600 max-w-lg text-sm font-medium mb-8">Восстановите баланс сил, очистите мысли и настройтесь на идеальный сервис.</p>
+
+                        <div className="flex items-center justify-center gap-8 bg-white border border-zinc-100 p-5 rounded-2xl shadow-sm w-full max-w-sm mb-8">
+                            <div className="flex-1"><span className="block text-3xl font-black text-zinc-900">{streak}</span><span className="text-[10px] font-bold text-zinc-400 uppercase">Дней серии</span></div>
+                            <div className="w-[1px] h-10 bg-zinc-200" />
+                            <div className="flex-1"><span className="block text-3xl font-black text-zinc-900">{totalMinutes}</span><span className="text-[10px] font-bold text-zinc-400 uppercase">Всего минут</span></div>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
+                            <button onClick={() => onStart(ALL_SESSIONS[0])} className="w-full sm:w-auto bg-zinc-950 text-white px-8 py-3.5 rounded-full font-bold text-sm shadow-md active:scale-95 flex items-center justify-center gap-2"><Icon.Play /> Быстрый старт</button>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <h2 className="text-xl font-black tracking-tight text-zinc-800">Выберите направление</h2>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                            {categoriesDef.map((cat, i) => (
+                                <div key={i} onClick={() => { setActiveCategory(activeCategory === cat.title ? null : cat.title); }} className={`liquid-glass rounded-2xl p-5 flex flex-col items-center justify-center text-center h-36 cursor-pointer apple-spring ${activeCategory === cat.title ? 'ring-2 ring-cyan-500 bg-white' : ''}`}>
+                                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${cat.bg} flex items-center justify-center mb-3`}>{cat.icon}</div>
+                                    <h3 className="font-bold text-zinc-900 text-xs tracking-tight leading-tight">{cat.title}</h3>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto text-left">
+                        <div className="md:col-span-2 space-y-3">
+                            <h3 className="text-lg font-black text-zinc-800">{activeCategory ? `Категория: ${activeCategory}` : 'Рекомендуемые треки'}</h3>
+                            <div className="space-y-2.5">
+                                {displayedSessions.map((session) => (
+                                    <div key={session.id} onClick={() => onStart(session)} className="liquid-glass bg-white/50 hover:bg-white rounded-xl p-4 flex items-center justify-between cursor-pointer apple-spring shadow-sm border-l-4 border-l-cyan-500">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-9 h-9 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600"><Icon.Play /></div>
+                                            <div>
+                                                <h4 className="font-bold text-zinc-900 text-sm tracking-tight">{session.title}</h4>
+                                                <div className="flex items-center gap-2 mt-1 text-[11px] text-zinc-500 font-semibold"><span className="text-cyan-600">{session.category}</span><span>•</span><span>{session.duration} мин</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function BreathworkView({ triggerNotice }) {
+            const [phase, setPhase] = useState('Ready');
+            const [timerSeconds, setTimerSeconds] = useState(4);
+            const [sessionRunning, setSessionRunning] = useState(false);
+            const intervalRef = useRef(null);
+
+            useEffect(() => {
+                if (sessionRunning) {
+                    intervalRef.current = setInterval(() => {
+                        setTimerSeconds(prev => {
+                            if (prev <= 1) {
+                                if (phase === 'Ready' || phase === 'HoldOut') { setPhase('Inhale'); return 4; } 
+                                else if (phase === 'Inhale') { setPhase('HoldIn'); return 4; } 
+                                else if (phase === 'HoldIn') { setPhase('Exhale'); return 4; } 
+                                else if (phase === 'Exhale') { setPhase('HoldOut'); return 4; }
+                            }
+                            return prev - 1;
+                        });
+                    }, 1000);
+                } else { clearInterval(intervalRef.current); }
+                return () => clearInterval(intervalRef.current);
+            }, [sessionRunning, phase]);
+
+            return (
+                <div className="max-w-md mx-auto space-y-8 text-center flex flex-col items-center">
+                    <h2 className="text-3xl font-black text-zinc-900">Антистресс ритм</h2>
+                    <div className="liquid-glass rounded-[40px] w-full aspect-square max-w-[320px] flex flex-col justify-center items-center relative overflow-hidden p-8">
+                        <div className="relative z-10">
+                            <h3 className="text-2xl font-black text-zinc-900">{sessionRunning ? phase : 'Квадратное дыхание'}</h3>
+                            <div className="text-5xl font-light mt-1">{timerSeconds}s</div>
+                        </div>
+                    </div>
+                    <button onClick={() => { setSessionRunning(!sessionRunning); if(!sessionRunning) AudioEngine.playAmbient('wind'); else AudioEngine.stop(); }} className="w-full max-w-[280px] py-4 bg-zinc-950 text-white rounded-full font-bold">
+                        {sessionRunning ? 'Остановить' : 'Начать'}
+                    </button>
+                </div>
+            );
+        }
+
+        // --- ПЛЕЕР С ПЕРЕКЛЮЧЕНИЕМ НАСТОЯЩИХ AI ТРЕКОВ ---
+        function MeditationPlayerScreen({ session, onClose, onComplete }) {
+            const [isPlaying, setIsPlaying] = useState(true);
+            const [secondsRemaining, setSecondsRemaining] = useState(session.duration * 60);
+            const [soundVolume, setSoundVolume] = useState(0.25);
+            const [soundType, setSoundType] = useState(session.sound || 'drone');
+            const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
+            
+            // Переключатель: 'female' или 'male' AI дорожки
+            const [aiVoiceGender, setAiVoiceGender] = useState('female'); 
+
+            useEffect(() => {
+                if (isPlaying) {
+                    AudioEngine.playAmbient(soundType); AudioEngine.setVolume(soundVolume);
+                    
+                    // Триггерим приветственную AI фразу (интро) при самом старте
+                    if (isVoiceEnabled && secondsRemaining === session.duration * 60) {
+                        NeuralVoicePlayer.playFile(VOICE_TRACKS[aiVoiceGender].intro);
+                    }
+                } else {
+                    AudioEngine.stop();
+                    NeuralVoicePlayer.stop();
+                }
+            }, [isPlaying, soundType, aiVoiceGender]);
+
+            useEffect(() => {
+                let timerInterval = null;
+                if (isPlaying && secondsRemaining > 0) {
+                    timerInterval = setInterval(() => {
+                        setSecondsRemaining(s => {
+                            const nextSec = s - 1;
+                            
+                            // Каждые 30 секунд проигрываем случайную реалистичную AI фразу
+                            if (isVoiceEnabled && nextSec > 0 && nextSec % 30 === 0) {
+                                const phrasesArr = VOICE_TRACKS[aiVoiceGender].phrases;
+                                const randomFileUrl = phrasesArr[Math.floor(Math.random() * phrasesArr.length)];
+                                NeuralVoicePlayer.playFile(randomFileUrl);
+                            }
+                            return nextSec;
+                        });
+                    }, 1000);
+                } else if (secondsRemaining === 0) {
+                    AudioEngine.stop(); NeuralVoicePlayer.stop(); onComplete(session.duration);
+                }
+                return () => clearInterval(timerInterval);
+            }, [isPlaying, isVoiceEnabled, secondsRemaining, aiVoiceGender]);
+
+            const progressPercentage = (((session.duration * 60) - secondsRemaining) / (session.duration * 60)) * 100;
+
+            return (
+                <div className="fixed inset-0 z-50 bg-slate-50/95 backdrop-blur-3xl flex flex-col justify-between p-6 text-center animate-[fadeIn_0.25s_ease-out]">
+                    <div className="flex items-center justify-between w-full max-w-md mx-auto">
+                        <button onClick={() => { AudioEngine.stop(); NeuralVoicePlayer.stop(); onClose(); }} className="bg-zinc-200 text-zinc-900 px-5 py-2.5 rounded-full text-xs font-bold">Выйти</button>
+                        <h2 className="font-extrabold text-zinc-900 text-xs truncate max-w-[150px]">{session.title}</h2>
+                        <button onClick={() => { AudioEngine.stop(); NeuralVoicePlayer.stop(); onComplete(session.duration); }} className="bg-zinc-900 text-white px-5 py-2.5 rounded-full text-xs font-bold">Готово</button>
+                    </div>
+
+                    <div className="flex-1 flex flex-col items-center justify-center relative">
+                        <div className="w-56 h-56 rounded-full liquid-glass flex flex-col items-center justify-center shadow-lg border border-white">
+                            <span className="text-5xl font-light tabular-nums">{Math.floor(secondsRemaining / 60)}:{String(secondsRemaining % 60).padStart(2, '0')}</span>
+                            <span className="text-[10px] font-black text-zinc-400 uppercase mt-2">Осталось</span>
+                        </div>
+                    </div>
+
+                    <div className="w-full max-w-sm mx-auto space-y-6 mb-4">
+                        <div className="w-full bg-zinc-200 rounded-full h-1.5 overflow-hidden">
+                            <div style={{ width: `${progressPercentage}%` }} className="bg-gradient-to-r from-cyan-500 to-indigo-500 h-full progress-fill" />
+                        </div>
+
+                        <div className="flex items-center justify-center gap-8">
+                            <button onClick={() => setIsPlaying(!isPlaying)} className="w-16 h-16 rounded-full bg-zinc-950 text-white flex items-center justify-center shadow-lg">
+                                {isPlaying ? <Icon.Pause /> : <Icon.Play />}
+                            </button>
+                        </div>
+
+                        <div className="bg-white border border-zinc-100 rounded-2xl p-4 space-y-4 shadow-sm">
+                            <div className="grid grid-cols-4 gap-2 text-[11px] font-bold">
+                                {['drone', 'waves', 'wind', 'bell'].map((snd) => (
+                                    <button key={snd} onClick={() => { setSoundType(snd); if(isPlaying) AudioEngine.playAmbient(snd); }} className={`py-2 rounded-xl ${soundType === snd ? 'bg-zinc-900 text-white' : 'bg-zinc-100'}`}>{snd}</button>
+                                ))}
+                            </div>
+
+                            {/* НАСТРОЙКА КРАСИВОГО ГОЛОСА */}
+                            <div className="space-y-2 pt-2 border-t border-zinc-100 text-left">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-bold text-zinc-700">🎙️ Premium AI Голос:</span>
+                                    <button 
+                                        onClick={() => { setIsVoiceEnabled(!isVoiceEnabled); if(isVoiceEnabled) NeuralVoicePlayer.stop(); }}
+                                        className={`text-[11px] font-bold px-3 py-1 rounded-md ${isVoiceEnabled ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}
+                                    >
+                                        {isVoiceEnabled ? 'Включен' : 'Выключен'}
+                                    </button>
+                                </div>
+                                
+                                {isVoiceEnabled && (
+                                    <div className="flex gap-2 pt-1">
+                                        <button 
+                                            onClick={() => { setAiVoiceGender('female'); NeuralVoicePlayer.playFile(VOICE_TRACKS.female.intro); }}
+                                            className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${aiVoiceGender === 'female' ? 'bg-cyan-500 text-white border-transparent' : 'bg-zinc-50 text-zinc-600'}`}
+                                        >
+                                            👩 Живой Женский (AI)
+                                        </button>
+                                        <button 
+                                            onClick={() => { setAiVoiceGender('male'); NeuralVoicePlayer.playFile(VOICE_TRACKS.male.intro); }}
+                                            className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${aiVoiceGender === 'male' ? 'bg-zinc-900 text-white border-transparent' : 'bg-zinc-50 text-zinc-600'}`}
+                                        >
+                                            👨 Живой Мужской (AI)
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex items-center gap-3 pt-1">
+                                <Icon.Volume />
+                                <input type="range" min="0" max="0.7" step="0.05" value={soundVolume} onChange={(e) => { const nv = parseFloat(e.target.value); setSoundVolume(nv); AudioEngine.setVolume(nv); }} className="w-full h-1 bg-zinc-200 appearance-none cursor-pointer accent-zinc-900" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PremiumZenApp />);
+    </script>
+</body>
+</html>
